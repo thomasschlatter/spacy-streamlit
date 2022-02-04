@@ -277,7 +277,7 @@ with right:
         for idx, sent in enumerate(doc.sents):
             enriched_sentence = []
             for tok in sent:
-                synsets = tok._.wordnet.wordnet_synsets_for_domain(economy_domains)
+                synsets = tok._.wordnet.wordnet_synsets_for_domain(wordnet_domains)
                 if not synsets:
                     enriched_sentence.append(token.text)
                 else:
