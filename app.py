@@ -147,7 +147,10 @@ def filter_tokens(doc):
     clean_tokens = [tok for tok in clean_tokens if not tok.is_punct]
     clean_tokens = [tok for tok in clean_tokens if not tok.is_space]
     return clean_tokens
-          
+
+def get_def_and_ex_from_wordnet(synsets):
+    pass
+
 # Page setting
 st.set_page_config(
     page_icon="🤠",
@@ -272,32 +275,50 @@ with right:
             st.write(f"### {keyword} ({rounded_score})")
         
         st.markdown("## 分析後文本") 
-        wordnet_domains = ['engineering', 'computer_science', 'medicine', 'genetics', 'linguistics']
         for idx, sent in enumerate(doc.sents):
             enriched_sentence = []
             for tok in sent:
-                synsets = tok._.wordnet.wordnet_synsets_for_domain(wordnet_domains)
-                if not synsets:
+                if tok.pos_ != "VERB":
                     enriched_sentence.append(tok.text)
                 else:
-                    lemmas_for_synset = [lemma for s in synsets for lemma in s.lemma_names()]
-                    lemmas_for_synset = list(set(lemmas_for_synset))
+                    synsets = tok._.wordnet.synsets()
+                    if synsets:
+                        v_synsets = [s for s in synsets if s.pos()=='v']
+                        if not v_synsets:
+                            enriched_sentence.append(tok.text)
+                        else:
+                            lemmas_for_synset = [lemma for s in v_synsets for lemma in s.lemma_names()]
+                            lemmas_for_synset = list(set(lemmas_for_synset))
+
+                            try:
+                                lemmas_for_synset.remove(tok.text)
+                            except:
+                                pass
+
+                            if len(lemmas_for_synset) > 5:
+                                lemmas_for_synset = lemmas_for_synset[:5]
+
+                            lemmas_for_synset = [s.replace("_", " ") for s in lemmas_for_synset]
+                            lemmas_for_synset = " | ".join(lemmas_for_synset)
+                            enriched_tok = f"{tok.text} (cf. {lemmas_for_synset})"
+                            enriched_sentence.append(enriched_tok)  
                     
-                    try:
-                        lemmas_for_synset.remove(tok.text)
-                    except:
-                        pass
-                    
-                    if len(lemmas_for_synset) > 5:
-                        lemmas_for_synset = lemmas_for_synset[:5]
-                    
-                    lemmas_for_synset = [s.replace("_", " ") for s in lemmas_for_synset]
-                    lemmas_for_synset = " | ".join(lemmas_for_synset)
-                    enriched_tok = f"{tok.text} (cf. {lemmas_for_synset})"
-                    enriched_sentence.append(enriched_tok)
+                
             display_text = " ".join(enriched_sentence)
             st.write(f"{idx+1} >>> {display_text}")     
             
+        st.markdown("## 單詞解釋與例句")
+        clean_tokens = filter_tokens(doc)
+        num_pattern = re.compile(r"[0-9]")
+        clean_lemmas = [tok.lemma_ for tok in clean_tokens if not num_pattern.search(tok.lemma_)]
+        vocab = list(set(clean_lemmas))
+        if vocab:
+            selected_words = st.multiselect("請選擇要查詢的單詞: ", vocab, vocab[0:3])
+            for w in selected_words:
+                st.write(f"### {w}")
+                with st.expander("點擊 + 檢視結果"):
+                    pass
+                    
         st.markdown("## 詞形變化")
         # Collect inflected forms
         inflected_forms = [tok for tok in doc if tok.text.lower() != tok.lemma_.lower()]
