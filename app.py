@@ -279,16 +279,16 @@ with right:
             for tok in sent:
                 synsets = tok._.wordnet.wordnet_synsets_for_domain(wordnet_domains)
                 if not synsets:
-                    enriched_sentence.append(token.text)
+                    enriched_sentence.append(tok.text)
                 else:
                     lemmas_for_synset = [lemma for s in synsets for lemma in s.lemma_names()]
                     lemmas_for_synset = list(set(lemmas_for_synset))
                     try:
-                        lemmas_for_synset.remove(token.text)
+                        lemmas_for_synset.remove(tok.text)
                     except:
                         pass
                     lemmas_for_synset = "|".join(lemmas_for_synset)
-                    enriched_tok = f"{token.text} (cf. {lemmas_for_synset})"
+                    enriched_tok = f"{tok.text} (cf. {lemmas_for_synset})"
                     enriched_sentence.append(enriched_tok)
             display_text = " ".join(enriched_sentence)
             st.write(f"{idx+1} >>> {display_text}")     
