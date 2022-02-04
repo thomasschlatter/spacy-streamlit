@@ -10,6 +10,7 @@ from spacy_streamlit import visualize_ner, visualize_tokens
 #from spacy.language import Language
 from spacy.tokens import Doc
 import spacy_ke
+from spacy_wordnet.wordnet_annotator import WordnetAnnotator 
 import streamlit as st
 import nltk
 
