@@ -21,10 +21,9 @@ MODELS = {"中文": "zh_core_web_sm",
 models_to_display = list(MODELS.keys())
 ZH_TEXT = """（中央社）迎接虎年到來，台北101今天表示，即日起推出「虎年新春燈光秀」，將持續至2月5日，每晚6時至10時，除整點會有報時燈光變化外，每15分鐘還會有3分鐘的燈光秀。台北101下午透過新聞稿表示，今年特別設計「虎年新春燈光秀」，從今晚開始閃耀台北天際線，一直延續至2月5日，共7天。"""
 ZH_REGEX = "\d{2,4}[\u4E00-\u9FFF]+"
-EN_TEXT = """(CNN) Not all Lunar New Year foods are created equal. Some only make a brief appearance at the festival for auspicious purposes. Others are so delicious they grace dim sum tables around the world all year.
-Turnip cake -- called "loh bak goh" in Cantonese -- falls into the latter category.
-Chef Tsang Chiu King, culinary director of Ming Court in Hong Kong's Wan Chai area, has his own theory on why turnip cake is such a popular Lunar New Year dish, especially in southern China.
-"Compared to other Lunar New Year cakes, turnip cake is popular as it's one of the few savory new year puddings. Together with the freshness of the white radish, it can be quite addictive as a snack or a main dish," he says."""
+EN_TEXT = """(CNN) Residents of Taiwan's Rainbow Village are not your average fellow homo sapiens, but whimsical, brightly-colored animals.
+Covered in vibrant colors and funky illustrations from the walls to the floor, the 1,000 square meter art park in Taichung, central Taiwan, has been an Instagrammers' favorite thanks to its kaleidoscopic visuals, attracting around two million visitors per year before the Covid-19 pandemic.
+People don't visit just for its aesthetics, they also love its backstory: The village was once on the verge of demolition, but one veteran's simple action of painting saved it and gave it an even more glamourous second life."""
 EN_REGEX = "(ed|ing)$"
 JA_TEXT = """（朝日新聞）台湾気分のパワースポット ＪＲ大久保駅南口のすぐそばにある「東京媽祖廟（まそびょう）」は、台湾で広く信仰されている道教の神様を祭る。居酒屋やコンビニが並ぶ通りで、金色の竜など豪華な装飾が施された４階建ての赤い建物はとても目立つ。"""
 JA_REGEX = "[たい]$"
@@ -273,7 +272,7 @@ with right:
             st.write(f"### {keyword} ({rounded_score})")
         
         st.markdown("## 分析後文本") 
-        wordnet_domains = ['pure_science', 'applied_science', 'doctrines']
+        wordnet_domains = ['pure_science', 'applied_science']
         for idx, sent in enumerate(doc.sents):
             enriched_sentence = []
             for tok in sent:
