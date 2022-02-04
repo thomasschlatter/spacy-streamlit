@@ -272,7 +272,7 @@ with right:
             st.write(f"### {keyword} ({rounded_score})")
         
         st.markdown("## 分析後文本") 
-        wordnet_domains = ['pure_science', 'applied_science']
+        wordnet_domains = ['engineering', 'computer_science', 'medicine', 'genetics', 'linguistics']
         for idx, sent in enumerate(doc.sents):
             enriched_sentence = []
             for tok in sent:
@@ -282,11 +282,17 @@ with right:
                 else:
                     lemmas_for_synset = [lemma for s in synsets for lemma in s.lemma_names()]
                     lemmas_for_synset = list(set(lemmas_for_synset))
+                    
                     try:
                         lemmas_for_synset.remove(tok.text)
                     except:
                         pass
-                    lemmas_for_synset = "|".join(lemmas_for_synset)
+                    
+                    if len(lemmas_for_synset) > 5:
+                        lemmas_for_synset = lemmas_for_synset[:5]
+                    
+                    lemmas_for_synset = [s.replace("_", " ") for s in lemmas_for_synset]
+                    lemmas_for_synset = " | ".join(lemmas_for_synset)
                     enriched_tok = f"{tok.text} (cf. {lemmas_for_synset})"
                     enriched_sentence.append(enriched_tok)
             display_text = " ".join(enriched_sentence)
