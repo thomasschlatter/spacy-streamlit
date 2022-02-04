@@ -4,6 +4,7 @@ ja_ginza
 # ja_ginza depends on spacy>=3.2.0,<3.3.0
 spacy>=3.2.0,<3.3.0
 spacy-streamlit>=1.0.0rc1,<1.1.0
+spacy-wordnet
 
 # sapCy models
 https://github.com/explosion/spacy-models/releases/download/zh_core_web_sm-3.2.0/zh_core_web_sm-3.2.0.tar.gz#egg=zh_core_web_sm
