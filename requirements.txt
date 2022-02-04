@@ -5,6 +5,8 @@ ja_ginza
 spacy>=3.2.0,<3.3.0
 spacy-streamlit>=1.0.0rc1,<1.1.0
 spacy-wordnet
+# spacy-wordnet depends on nltk
+nltk
 
 # sapCy models
 https://github.com/explosion/spacy-models/releases/download/zh_core_web_sm-3.2.0/zh_core_web_sm-3.2.0.tar.gz#egg=zh_core_web_sm
