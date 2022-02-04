@@ -11,6 +11,7 @@ from spacy_streamlit import visualize_ner, visualize_tokens
 from spacy.tokens import Doc
 import spacy_ke
 import streamlit as st
+import nltk
 
 # Global variables
 MODELS = {"中文": "zh_core_web_sm", 
@@ -163,6 +164,10 @@ nlp = spacy.load(MODELS[selected_model])
 # nlp.add_pipe("merge_entities") 
 st.markdown("---")
 
+# Download NLTK data 
+nltk.download('wordnet')
+nltk.download('omw') # standing for Open Multilingual WordNet
+
 # Default text and regex
 st.markdown("## 待分析文本") 
 if selected_model == models_to_display[0]: # Chinese
@@ -254,6 +259,7 @@ with right:
             create_jap_df(inflected_forms)
 
     elif selected_model == models_to_display[1]: # English         
+        nlp.add_pipe("spacy_wordnet", after='tagger', config={'lang': nlp.lang})
         nlp.add_pipe("yake")
         doc = nlp(text)
         
@@ -263,13 +269,27 @@ with right:
         kws2scores = sorted(kws2scores.items(), key=lambda x: x[1], reverse=True)
         for keyword, score in kws2scores: 
             rounded_score = round(score, 3)
-            st.write(f"詞語: {keyword} | YAKE分數: {rounded_score}")
+            st.write(f"### {keyword} ({rounded_score})")
         
         st.markdown("## 分析後文本") 
+        wordnet_domains = ['pure_science', 'applied_science', 'doctrines']
         for idx, sent in enumerate(doc.sents):
-            clean_tokens = [tok for tok in sent if tok.pos_ not in ["PUNCT", "SYM"]]
-            display = [f"{tok.text} [> {tok.lemma_}]" if tok.text.lower() != tok.lemma_.lower() else tok.text for tok in clean_tokens]
-            display_text = " ".join(display)
+            enriched_sentence = []
+            for tok in sent:
+                synsets = tok._.wordnet.wordnet_synsets_for_domain(economy_domains)
+                if not synsets:
+                    enriched_sentence.append(token.text)
+                else:
+                    lemmas_for_synset = [lemma for s in synsets for lemma in s.lemma_names()]
+                    lemmas_for_synset = list(set(lemmas_for_synset))
+                    try:
+                        lemmas_for_synset.remove(token.text)
+                    except:
+                        pass
+                    lemmas_for_synset = "|".join(lemmas_for_synset)
+                    enriched_tok = f"{token.text} (cf. {lemmas_for_synset})"
+                    enriched_sentence.append(enriched_tok)
+            display_text = " ".join(enriched_sentence)
             st.write(f"{idx+1} >>> {display_text}")     
             
         st.markdown("## 詞形變化")
