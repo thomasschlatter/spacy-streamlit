@@ -270,9 +270,11 @@ with right:
         kw_num = st.slider("請選擇關鍵詞數量", 1, 10, 3)
         kws2scores = {keyword: score for keyword, score in doc._.extract_keywords(n=kw_num)}
         kws2scores = sorted(kws2scores.items(), key=lambda x: x[1], reverse=True)
+        count = 1
         for keyword, score in kws2scores: 
             rounded_score = round(score, 3)
-            st.write(f"### {keyword} ({rounded_score})")
+            st.write(f"{count} >>> {keyword} ({rounded_score})")
+            count += 1 
         
         st.markdown("## 分析後文本") 
         for idx, sent in enumerate(doc.sents):
