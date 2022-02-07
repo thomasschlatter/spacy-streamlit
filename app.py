@@ -230,6 +230,9 @@ with right:
                 moedict_caller(w)                        
                     
     elif selected_model == models_to_display[2]: # Japanese 
+        nlp.add_pipe("yake")
+        doc = nlp(text)
+        
         st.markdown("## 分析後文本") 
         for idx, sent in enumerate(doc.sents):
             clean_tokens = [tok for tok in sent if tok.pos_ not in ["PUNCT", "SYM"]]
@@ -241,7 +244,17 @@ with right:
               st.write(f"{idx+1} >>> {display_text}")
             else:
               st.write(f"{idx+1} >>> EMPTY LINE")  
-          
+        
+        st.markdown("## 關鍵詞") 
+        kw_num = st.slider("請選擇關鍵詞數量", 1, 10, 3)
+        kws2scores = {keyword: score for keyword, score in doc._.extract_keywords(n=kw_num)}
+        kws2scores = sorted(kws2scores.items(), key=lambda x: x[1], reverse=True)
+        count = 1
+        for keyword, score in kws2scores: 
+            rounded_score = round(score, 3)
+            st.write(f"{count} >>> {keyword} ({rounded_score})")
+            count += 1 
+        
         st.markdown("## 單詞解釋與例句")
         clean_tokens = filter_tokens(doc)
         alphanum_pattern = re.compile(r"[a-zA-Z0-9]")
