@@ -151,6 +151,17 @@ def filter_tokens(doc):
 def get_def_and_ex_from_wordnet(synsets):
     pass
 
+def create_kw_section(doc):
+    st.markdown("## 關鍵詞") 
+    kw_num = st.slider("請選擇關鍵詞數量", 1, 10, 3)
+    kws2scores = {keyword: score for keyword, score in doc._.extract_keywords(n=kw_num)}
+    kws2scores = sorted(kws2scores.items(), key=lambda x: x[1], reverse=True)
+    count = 1
+    for keyword, score in kws2scores: 
+        rounded_score = round(score, 3)
+        st.write(f"{count} >>> {keyword} ({rounded_score})")
+        count += 1 
+            
 # Page setting
 st.set_page_config(
     page_icon="🤠",
@@ -162,6 +173,7 @@ st.markdown(f"# {DESCRIPTION}")
 st.markdown("## 語言模型") 
 selected_model = st.radio("請選擇語言", models_to_display)
 nlp = spacy.load(MODELS[selected_model])
+nlp.add_pipe("yake") # keyword extraction
           
 # Merge entity spans to tokens
 # nlp.add_pipe("merge_entities") 
@@ -205,6 +217,8 @@ with left:
 with right:
     punct_and_sym = ["PUNCT", "SYM"]
     if selected_model == models_to_display[0]: # Chinese 
+        create_kw_section(doc)
+
         st.markdown("## 分析後文本") 
         for idx, sent in enumerate(doc.sents):
             tokens_text = [tok.text for tok in sent if tok.pos_ not in punct_and_sym]
@@ -218,7 +232,7 @@ with right:
               st.write(f"{idx+1} >>> {display_text}")
             else:
               st.write(f"{idx+1} >>> EMPTY LINE")
-
+                
         st.markdown("## 單詞解釋")
         clean_tokens = filter_tokens(doc)
         alphanum_pattern = re.compile(r"[a-zA-Z0-9]")
@@ -229,10 +243,9 @@ with right:
             for w in selected_words:
                 moedict_caller(w)                        
                     
-    elif selected_model == models_to_display[2]: # Japanese 
-        nlp.add_pipe("yake")
-        doc = nlp(text)
-        
+    elif selected_model == models_to_display[2]: # Japanese  
+        create_kw_section(doc)
+
         st.markdown("## 分析後文本") 
         for idx, sent in enumerate(doc.sents):
             clean_tokens = [tok for tok in sent if tok.pos_ not in ["PUNCT", "SYM"]]
@@ -244,17 +257,7 @@ with right:
               st.write(f"{idx+1} >>> {display_text}")
             else:
               st.write(f"{idx+1} >>> EMPTY LINE")  
-        
-        st.markdown("## 關鍵詞") 
-        kw_num = st.slider("請選擇關鍵詞數量", 1, 10, 3)
-        kws2scores = {keyword: score for keyword, score in doc._.extract_keywords(n=kw_num)}
-        kws2scores = sorted(kws2scores.items(), key=lambda x: x[1], reverse=True)
-        count = 1
-        for keyword, score in kws2scores: 
-            rounded_score = round(score, 3)
-            st.write(f"{count} >>> {keyword} ({rounded_score})")
-            count += 1 
-        
+                
         st.markdown("## 單詞解釋與例句")
         clean_tokens = filter_tokens(doc)
         alphanum_pattern = re.compile(r"[a-zA-Z0-9]")
@@ -274,21 +277,11 @@ with right:
         if inflected_forms:
             create_jap_df(inflected_forms)
 
-    elif selected_model == models_to_display[1]: # English         
+    elif selected_model == models_to_display[1]: # English                 
+        create_kw_section(doc)
+        
         nlp.add_pipe("spacy_wordnet", after='tagger', config={'lang': nlp.lang})
-        nlp.add_pipe("yake")
         doc = nlp(text)
-        
-        st.markdown("## 關鍵詞") 
-        kw_num = st.slider("請選擇關鍵詞數量", 1, 10, 3)
-        kws2scores = {keyword: score for keyword, score in doc._.extract_keywords(n=kw_num)}
-        kws2scores = sorted(kws2scores.items(), key=lambda x: x[1], reverse=True)
-        count = 1
-        for keyword, score in kws2scores: 
-            rounded_score = round(score, 3)
-            st.write(f"{count} >>> {keyword} ({rounded_score})")
-            count += 1 
-        
         st.markdown("## 分析後文本") 
         for idx, sent in enumerate(doc.sents):
             enriched_sentence = []
