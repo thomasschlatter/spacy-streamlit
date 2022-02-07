@@ -318,8 +318,11 @@ with right:
         st.markdown("## 單詞解釋與例句")
         clean_tokens = filter_tokens(doc)
         num_pattern = re.compile(r"[0-9]")
-        clean_lemmas = [tok.lemma_ for tok in clean_tokens if not num_pattern.search(tok.lemma_)]
-        vocab = list(set(clean_lemmas))
+        clean_tokens = [tok for tok in clean_tokens if not num_pattern.search(tok.lemma_)]
+        selected_pos = ["VERB", "NOUN", "ADJ", "ADV"]
+        clean_tokens = [tok for tok in clean_tokens if tok.pos_ in selected_pos]
+        tokens_text_pos = [tok.text + " | " + tok.pos_ for tok in clean_tokens]
+        vocab = list(set(tokens_text_pos))
         if vocab:
             selected_words = st.multiselect("請選擇要查詢的單詞: ", vocab, vocab[0:3])
             for w in selected_words:
