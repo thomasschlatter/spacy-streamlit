@@ -217,7 +217,7 @@ with left:
 with right:
     punct_and_sym = ["PUNCT", "SYM"]
     if selected_model == models_to_display[0]: # Chinese 
-        create_kw_section(doc)
+        #create_kw_section(doc) # YAKE doesn't work for Chinese texts
 
         st.markdown("## 分析後文本") 
         for idx, sent in enumerate(doc.sents):
