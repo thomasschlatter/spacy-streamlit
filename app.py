@@ -195,21 +195,18 @@ st.set_page_config(
 
 # Choose a language model
 st.markdown(f"# {DESCRIPTION}") 
-st.markdown("## 語言模型") 
-selected_model = st.radio("請選擇語言", models_to_display)
+selected_model = st.sidebar.radio("請選擇語言", models_to_display)
 nlp = spacy.load(MODELS[selected_model])
 nlp.add_pipe("yake") # keyword extraction
           
 # Merge entity spans to tokens
 # nlp.add_pipe("merge_entities") 
-st.markdown("---")
 
 # Download NLTK data 
 nltk.download('wordnet')
 nltk.download('omw') # standing for Open Multilingual WordNet
 
-# Default text and regex
-st.markdown("## 待分析文本") 
+# Shared logic across languages
 if selected_model == models_to_display[0]: # Chinese
     # Select a tokenizer if the Chinese model is chosen
     selected_tokenizer = st.radio("請選擇斷詞模型", ["jieba-TW", "spaCy"])
@@ -224,21 +221,22 @@ elif selected_model == models_to_display[2]: # Japanese
     default_text = JA_TEXT
     default_regex = JA_REGEX 
 
-st.info("在下面的文字框輸入文本後，按下Ctrl + Enter以更新分析結果")
+st.markdown("## 待分析文本")     
+st.info("請在下面的文字框輸入文本並按下Ctrl + Enter以更新分析結果")
 text = st.text_area("",  default_text, height=200)
 doc = nlp(text)
 st.markdown("---")
 
+# Language-specific logic 
 punct_and_sym = ["PUNCT", "SYM"]
 if selected_model == models_to_display[0]: # Chinese 
-    
-    ner_viz = st.checkbox("命名實體", True)
-    tok_table = st.checkbox("斷詞特徵", False)
-    #create_kw_section(doc) # YAKE doesn't work for Chinese texts
-    #keywords_extraction = st.checkbox("關鍵詞分析", False)
-    analyzed_text = st.checkbox("分析後文本", True)
-    defs_examples = st.checkbox("單詞解釋與例句", True)
-    #morphology = st.checkbox("詞形變化", True)
+    st.markdown("## 分析功能") 
+    #keywords_extraction = st.sidebar.checkbox("關鍵詞分析", False) # YAKE doesn't work for Chinese texts
+    analyzed_text = st.sidebar.checkbox("分析後文本", True)
+    defs_examples = st.sidebar.checkbox("單詞解釋與例句", True)
+    #morphology = st.sidebar.checkbox("詞形變化", True)
+    ner_viz = st.sidebar.checkbox("命名實體", True)
+    tok_table = st.sidebar.checkbox("斷詞特徵", False)
 
     if analyzed_text:
         st.markdown("## 分析後文本") 
@@ -274,12 +272,13 @@ if selected_model == models_to_display[0]: # Chinese
         visualize_tokens(doc, attrs=["text", "pos_", "tag_", "dep_", "head"], title="斷詞特徵")
     
 elif selected_model == models_to_display[2]: # Japanese 
-    ner_viz = st.checkbox("命名實體", True)
-    tok_table = st.checkbox("斷詞特徵", False)
-    keywords_extraction = st.checkbox("關鍵詞分析", False)
-    analyzed_text = st.checkbox("分析後文本", True)
-    defs_examples = st.checkbox("單詞解釋與例句", True)
-    morphology = st.checkbox("詞形變化", True)
+    st.markdown("## 分析功能")     
+    keywords_extraction = st.sidebar.checkbox("關鍵詞分析", False)
+    analyzed_text = st.sidebar.checkbox("分析後文本", True)
+    defs_examples = st.sidebar.checkbox("單詞解釋與例句", True)
+    morphology = st.sidebar.checkbox("詞形變化", True)
+    ner_viz = st.sidebar.checkbox("命名實體", True)
+    tok_table = st.sidebar.checkbox("斷詞特徵", False)
     
     if keywords_extraction:
         create_kw_section(doc)
@@ -326,12 +325,13 @@ elif selected_model == models_to_display[2]: # Japanese
         visualize_tokens(doc, attrs=["text", "pos_", "tag_", "dep_", "head"], title="斷詞特徵")
         
 elif selected_model == models_to_display[1]: # English 
-    ner_viz = st.checkbox("命名實體", True)
-    tok_table = st.checkbox("斷詞特徵", False)
-    keywords_extraction = st.checkbox("關鍵詞分析", False)
-    analyzed_text = st.checkbox("分析後文本", True)
-    defs_examples = st.checkbox("單詞解釋與例句", True)
-    morphology = st.checkbox("詞形變化", True)
+    st.markdown("## 分析功能")     
+    keywords_extraction = st.sidebar.checkbox("關鍵詞分析", False)
+    analyzed_text = st.sidebar.checkbox("分析後文本", True)
+    defs_examples = st.sidebar.checkbox("單詞解釋與例句", True)
+    morphology = st.sidebar.checkbox("詞形變化", True)
+    ner_viz = st.sidebar.checkbox("命名實體", True)
+    tok_table = st.sidebar.checkbox("斷詞特徵", False)
     
     if keywords_extraction:
         create_kw_section(doc)
