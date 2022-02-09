@@ -13,6 +13,7 @@ import spacy_ke
 from spacy_wordnet.wordnet_annotator import WordnetAnnotator 
 import streamlit as st
 import nltk
+from nltk.corpus import wordnet as wn
 
 # Global variables
 MODELS = {"中文": "zh_core_web_sm", 
@@ -148,8 +149,32 @@ def filter_tokens(doc):
     clean_tokens = [tok for tok in clean_tokens if not tok.is_space]
     return clean_tokens
 
-def get_def_and_ex_from_wordnet(synsets):
-    pass
+def get_def_and_ex_from_wordnet(word, pos_label):
+    mapper = {
+        "VERB": wn.VERB,
+        "NOUN": wn.NOUN,
+        "ADJ": wn.ADJ,
+        "ADV": wn.ADV,
+    }
+    
+    synsets = wn.synsets(word, pos=mapper[pos_label])
+    if len(synsets) > 3:
+        synsets = synsets[:3]
+    
+    sense_count = 1
+    for syn in synsets:
+        st.write(f"#### Relevant Sense {sense_count}: {syn.definition()}")
+        sense_count += 1
+        examples = syn.examples()
+        if not examples:
+            continue
+        elif len(examples) > 3:
+            examples = examples[:3]
+        ex_count = 1
+        for ex in examples:
+            st.write(f"##### Relevant Example {ex_count} >>> {ex}")
+            ex_count += 1    
+    
 
 def create_kw_section(doc):
     st.markdown("## 關鍵詞") 
@@ -326,9 +351,12 @@ with right:
         if vocab:
             selected_words = st.multiselect("請選擇要查詢的單詞: ", vocab, vocab[0:3])
             for w in selected_words:
+                word_pos = w.split("|")
+                word = word_pos[0].strip()
+                pos = word_pos[1].strip()
                 st.write(f"### {w}")
                 with st.expander("點擊 + 檢視結果"):
-                    pass
+                    get_def_and_ex_from_wordnet(word, pos)
                     
         st.markdown("## 詞形變化")
         # Collect inflected forms
