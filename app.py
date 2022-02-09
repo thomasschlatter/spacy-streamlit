@@ -163,7 +163,7 @@ def get_def_and_ex_from_wordnet(word, pos_label):
     
     sense_count = 1
     for syn in synsets:
-        st.write(f"#### Relevant Sense {sense_count}: {syn.definition()}")
+        st.write(f"Relevant Sense {sense_count}: {syn.definition()}")
         sense_count += 1
         examples = syn.examples()
         if not examples:
@@ -172,9 +172,9 @@ def get_def_and_ex_from_wordnet(word, pos_label):
             examples = examples[:3]
         ex_count = 1
         for ex in examples:
-            st.write(f"##### Relevant Example {ex_count} >>> {ex}")
+            st.write(f"Relevant Example {ex_count} >>> {ex}")
             ex_count += 1    
-    
+        st.markdown("---")
 
 def create_kw_section(doc):
     st.markdown("## 關鍵詞") 
@@ -346,8 +346,8 @@ with right:
         clean_tokens = [tok for tok in clean_tokens if not num_pattern.search(tok.lemma_)]
         selected_pos = ["VERB", "NOUN", "ADJ", "ADV"]
         clean_tokens = [tok for tok in clean_tokens if tok.pos_ in selected_pos]
-        tokens_text_pos = [tok.text + " | " + tok.pos_ for tok in clean_tokens]
-        vocab = list(set(tokens_text_pos))
+        tokens_lemma_pos = [tok.lemma_ + " | " + tok.pos_ for tok in clean_tokens]
+        vocab = list(set(tokens_lemma_pos))
         if vocab:
             selected_words = st.multiselect("請選擇要查詢的單詞: ", vocab, vocab[0:3])
             for w in selected_words:
