@@ -177,7 +177,7 @@ def get_def_and_ex_from_wordnet(word, pos_label):
         st.markdown("---")
 
 def create_kw_section(doc):
-    st.markdown("## 關鍵詞") 
+    st.markdown("## 關鍵詞分析") 
     kw_num = st.slider("請選擇關鍵詞數量", 1, 10, 3)
     kws2scores = {keyword: score for keyword, score in doc._.extract_keywords(n=kw_num)}
     kws2scores = sorted(kws2scores.items(), key=lambda x: x[1], reverse=True)
@@ -224,31 +224,22 @@ elif selected_model == models_to_display[2]: # Japanese
     default_text = JA_TEXT
     default_regex = JA_REGEX 
 
-st.info("修改文本後，按下Ctrl + Enter以更新")
-text = st.text_area("",  default_text, height=300)
+st.info("在下面的文字框輸入文本後，按下Ctrl + Enter以更新分析結果")
+text = st.text_area("",  default_text, height=200)
 doc = nlp(text)
 st.markdown("---")
 
-# Checkboxes
-left, right = st.columns(2)
-ner_viz = st.checkbox("命名實體", True)
-tok_table = st.checkbox("斷詞特徵", False)
-keywords_extraction = st.checkbox("關鍵詞", False)
-analyzed_text = st.checkbox("分析後文本", True)
-defs_examples = st.checkbox("單詞解釋與例句", True)
-morphology = st.checkbox("詞形變化", True)
-
-if ner_viz:
-    ner_labels = nlp.get_pipe("ner").labels
-    visualize_ner(doc, labels=ner_labels, show_table=False, title="命名實體")
-if tok_table:
-    visualize_tokens(doc, attrs=["text", "pos_", "tag_", "dep_", "head"], title="斷詞特徵")
-    st.markdown("---")
-
 punct_and_sym = ["PUNCT", "SYM"]
 if selected_model == models_to_display[0]: # Chinese 
-    #create_kw_section(doc) # YAKE doesn't work for Chinese texts
     
+    ner_viz = st.checkbox("命名實體", True)
+    tok_table = st.checkbox("斷詞特徵", False)
+    #create_kw_section(doc) # YAKE doesn't work for Chinese texts
+    #keywords_extraction = st.checkbox("關鍵詞分析", False)
+    analyzed_text = st.checkbox("分析後文本", True)
+    defs_examples = st.checkbox("單詞解釋與例句", True)
+    #morphology = st.checkbox("詞形變化", True)
+
     if analyzed_text:
         st.markdown("## 分析後文本") 
         for idx, sent in enumerate(doc.sents):
@@ -274,8 +265,22 @@ if selected_model == models_to_display[0]: # Chinese
             selected_words = st.multiselect("請選擇要查詢的單詞: ", vocab, vocab[0:3])
             for w in selected_words:
                 moedict_caller(w)                        
-
-elif selected_model == models_to_display[2]: # Japanese  
+    
+    if ner_viz:
+        ner_labels = nlp.get_pipe("ner").labels
+        visualize_ner(doc, labels=ner_labels, show_table=False, title="命名實體")
+        
+    if tok_table:
+        visualize_tokens(doc, attrs=["text", "pos_", "tag_", "dep_", "head"], title="斷詞特徵")
+    
+elif selected_model == models_to_display[2]: # Japanese 
+    ner_viz = st.checkbox("命名實體", True)
+    tok_table = st.checkbox("斷詞特徵", False)
+    keywords_extraction = st.checkbox("關鍵詞分析", False)
+    analyzed_text = st.checkbox("分析後文本", True)
+    defs_examples = st.checkbox("單詞解釋與例句", True)
+    morphology = st.checkbox("詞形變化", True)
+    
     if keywords_extraction:
         create_kw_section(doc)
 
@@ -313,11 +318,23 @@ elif selected_model == models_to_display[2]: # Japanese
         if inflected_forms:
             create_jap_df(inflected_forms)
 
+    if ner_viz:
+        ner_labels = nlp.get_pipe("ner").labels
+        visualize_ner(doc, labels=ner_labels, show_table=False, title="命名實體")
+        
+    if tok_table:
+        visualize_tokens(doc, attrs=["text", "pos_", "tag_", "dep_", "head"], title="斷詞特徵")
+        
 elif selected_model == models_to_display[1]: # English 
+    ner_viz = st.checkbox("命名實體", True)
+    tok_table = st.checkbox("斷詞特徵", False)
+    keywords_extraction = st.checkbox("關鍵詞分析", False)
+    analyzed_text = st.checkbox("分析後文本", True)
+    defs_examples = st.checkbox("單詞解釋與例句", True)
+    morphology = st.checkbox("詞形變化", True)
+    
     if keywords_extraction:
         create_kw_section(doc)
-
-
     
     if analyzed_text:
         st.markdown("## 分析後文本") 
@@ -380,3 +397,10 @@ elif selected_model == models_to_display[1]: # English
         inflected_forms = [tok for tok in doc if tok.text.lower() != tok.lemma_.lower()]
         if inflected_forms:
             create_eng_df(inflected_forms)
+
+    if ner_viz:
+        ner_labels = nlp.get_pipe("ner").labels
+        visualize_ner(doc, labels=ner_labels, show_table=False, title="命名實體")
+        
+    if tok_table:
+        visualize_tokens(doc, attrs=["text", "pos_", "tag_", "dep_", "head"], title="斷詞特徵")
