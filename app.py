@@ -22,7 +22,11 @@ MODELS = {"中文": "zh_core_web_sm",
 models_to_display = list(MODELS.keys())
 ZH_TEXT = """（中央社）迎接虎年到來，台北101今天表示，即日起推出「虎年新春燈光秀」，將持續至2月5日，每晚6時至10時，除整點會有報時燈光變化外，每15分鐘還會有3分鐘的燈光秀。台北101下午透過新聞稿表示，今年特別設計「虎年新春燈光秀」，從今晚開始閃耀台北天際線，一直延續至2月5日，共7天。"""
 ZH_REGEX = "\d{2,4}[\u4E00-\u9FFF]+"
-EN_TEXT = """(CNN) Taiwan is an island of unexpected beauty. With verdant valleys, hills and forests to roam in, it's the ideal destination for those who love to spend their vacation exploring the great outdoors. Intrepid hikers spend days scaling Snow Mountain in Shei-pa National Park. Those who prefer something a touch more sedate can still find well-marked walks and wondrous views in Taroko Gorge. The capital, Taipei, is one of Asia's finest futuristic cities, its Taipei 101 skyscraper unmissable when strolling through its brightly lit streets, its night markets and street food a match for anywhere in Asia. Tradition has held firm, though. Bao-an Temple has been carefully restored to its former glory, a pocket of calm amid the bustle of Taiwan."""
+EN_TEXT = """(Reuters) Taiwan's government believes there is "enormous" room for cooperation with the European Union on semiconductors, responding to plans from the bloc to boost its chip industry and cut its dependence on U.S. and Asian supplies.
+The EU's plan mentions Taiwan, home to the world's largest contract chipmaker TSMC and other leading semiconductor companies, as one of the "like-minded partners" Europe would like to work with.
+The plan, unveiled on Tuesday, calls for the European Commission to ease funding rules for innovative semiconductor plants, a move that comes as a global chip shortage and supply chain bottlenecks have created havoc for many industries.
+Taiwan's Foreign Ministry said in a statement it was pleased to see the strong momentum in bilateral trade and investment between Taiwan and the EU, and welcomed the EU attaching so much importance to the island.
+"""
 EN_REGEX = "(ed|ing)$"
 JA_TEXT = """（朝日新聞）台湾気分のパワースポット ＪＲ大久保駅南口のすぐそばにある「東京媽祖廟（まそびょう）」は、台湾で広く信仰されている道教の神様を祭る。居酒屋やコンビニが並ぶ通りで、金色の竜など豪華な装飾が施された４階建ての赤い建物はとても目立つ。"""
 JA_REGEX = "[たい]$"
@@ -233,6 +237,7 @@ st.markdown("---")
 punct_and_sym = ["PUNCT", "SYM"]
 if selected_model == models_to_display[0]: # Chinese 
     st.sidebar.write("請勾選功能") 
+    st.sidebar.markdown("---")
     #keywords_extraction = st.sidebar.checkbox("關鍵詞分析", False) # YAKE doesn't work for Chinese texts
     analyzed_text = st.sidebar.checkbox("分析後文本", True)
     defs_examples = st.sidebar.checkbox("單詞解釋與例句", True)
@@ -275,10 +280,11 @@ if selected_model == models_to_display[0]: # Chinese
     
 elif selected_model == models_to_display[2]: # Japanese 
     st.sidebar.write("請勾選功能") 
+    st.sidebar.markdown("---")
     keywords_extraction = st.sidebar.checkbox("關鍵詞分析", False)
     analyzed_text = st.sidebar.checkbox("分析後文本", True)
     defs_examples = st.sidebar.checkbox("單詞解釋與例句", True)
-    morphology = st.sidebar.checkbox("詞形變化", True)
+    morphology = st.sidebar.checkbox("詞形變化", False)
     ner_viz = st.sidebar.checkbox("命名實體", True)
     tok_table = st.sidebar.checkbox("斷詞特徵", False)
     
@@ -327,11 +333,12 @@ elif selected_model == models_to_display[2]: # Japanese
         visualize_tokens(doc, attrs=["text", "pos_", "tag_", "dep_", "head"], title="斷詞特徵")
         
 elif selected_model == models_to_display[1]: # English 
-    st.sidebar.write("請勾選功能") 
+    st.sidebar.write("請勾選功能")
+    st.sidebar.markdown("---")
     keywords_extraction = st.sidebar.checkbox("關鍵詞分析", False)
     analyzed_text = st.sidebar.checkbox("分析後文本", True)
     defs_examples = st.sidebar.checkbox("單詞解釋與例句", True)
-    morphology = st.sidebar.checkbox("詞形變化", True)
+    morphology = st.sidebar.checkbox("詞形變化", False)
     ner_viz = st.sidebar.checkbox("命名實體", True)
     tok_table = st.sidebar.checkbox("斷詞特徵", False)
     
