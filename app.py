@@ -229,21 +229,27 @@ text = st.text_area("",  default_text, height=300)
 doc = nlp(text)
 st.markdown("---")
 
-# Two columns
+# Checkboxes
 left, right = st.columns(2)
+ner_viz = st.checkbox("命名實體", True)
+tok_table = st.checkbox("斷詞特徵", False)
+keywords_extraction = st.checkbox("關鍵詞", False)
+analyzed_text = st.checkbox("分析後文本", True)
+defs_examples = st.checkbox("單詞解釋與例句", True)
+morphology = st.checkbox("詞形變化", True)
 
-with left:
-    # Model output
+if ner_viz:
     ner_labels = nlp.get_pipe("ner").labels
     visualize_ner(doc, labels=ner_labels, show_table=False, title="命名實體")
+if tok_table:
     visualize_tokens(doc, attrs=["text", "pos_", "tag_", "dep_", "head"], title="斷詞特徵")
     st.markdown("---")
 
-with right:
-    punct_and_sym = ["PUNCT", "SYM"]
-    if selected_model == models_to_display[0]: # Chinese 
-        #create_kw_section(doc) # YAKE doesn't work for Chinese texts
-
+punct_and_sym = ["PUNCT", "SYM"]
+if selected_model == models_to_display[0]: # Chinese 
+    #create_kw_section(doc) # YAKE doesn't work for Chinese texts
+    
+    if analyzed_text:
         st.markdown("## 分析後文本") 
         for idx, sent in enumerate(doc.sents):
             tokens_text = [tok.text for tok in sent if tok.pos_ not in punct_and_sym]
@@ -257,8 +263,9 @@ with right:
               st.write(f"{idx+1} >>> {display_text}")
             else:
               st.write(f"{idx+1} >>> EMPTY LINE")
-                
-        st.markdown("## 單詞解釋")
+    
+    if defs_examples:
+        st.markdown("## 單詞解釋與例句")
         clean_tokens = filter_tokens(doc)
         alphanum_pattern = re.compile(r"[a-zA-Z0-9]")
         clean_tokens_text = [tok.text for tok in clean_tokens if not alphanum_pattern.search(tok.text)]
@@ -267,10 +274,12 @@ with right:
             selected_words = st.multiselect("請選擇要查詢的單詞: ", vocab, vocab[0:3])
             for w in selected_words:
                 moedict_caller(w)                        
-                    
-    elif selected_model == models_to_display[2]: # Japanese  
+
+elif selected_model == models_to_display[2]: # Japanese  
+    if keywords_extraction:
         create_kw_section(doc)
 
+    if analyzed_text:
         st.markdown("## 分析後文本") 
         for idx, sent in enumerate(doc.sents):
             clean_tokens = [tok for tok in sent if tok.pos_ not in ["PUNCT", "SYM"]]
@@ -282,7 +291,8 @@ with right:
               st.write(f"{idx+1} >>> {display_text}")
             else:
               st.write(f"{idx+1} >>> EMPTY LINE")  
-                
+    
+    if defs_examples:
         st.markdown("## 單詞解釋與例句")
         clean_tokens = filter_tokens(doc)
         alphanum_pattern = re.compile(r"[a-zA-Z0-9]")
@@ -295,19 +305,24 @@ with right:
                 with st.expander("點擊 + 檢視結果"):
                     parse_jisho_senses(w)
                     parse_jisho_sentences(w)
-
+    
+    if morphology:
         st.markdown("## 詞形變化")
         # Collect inflected forms
         inflected_forms = [tok for tok in doc if tok.tag_.startswith("動詞") or tok.tag_.startswith("形")]
         if inflected_forms:
             create_jap_df(inflected_forms)
 
-    elif selected_model == models_to_display[1]: # English                 
+elif selected_model == models_to_display[1]: # English 
+    if keywords_extraction:
         create_kw_section(doc)
-        
+
+
+    
+    if analyzed_text:
+        st.markdown("## 分析後文本") 
         nlp.add_pipe("spacy_wordnet", after='tagger', config={'lang': nlp.lang})
         doc = nlp(text)
-        st.markdown("## 分析後文本") 
         for idx, sent in enumerate(doc.sents):
             enriched_sentence = []
             for tok in sent:
@@ -335,11 +350,12 @@ with right:
                             lemmas_for_synset = " | ".join(lemmas_for_synset)
                             enriched_tok = f"{tok.text} (cf. {lemmas_for_synset})"
                             enriched_sentence.append(enriched_tok)  
-                    
-                
+
+
             display_text = " ".join(enriched_sentence)
             st.write(f"{idx+1} >>> {display_text}")     
-            
+
+    if defs_examples:
         st.markdown("## 單詞解釋與例句")
         clean_tokens = filter_tokens(doc)
         num_pattern = re.compile(r"[0-9]")
@@ -357,7 +373,8 @@ with right:
                 st.write(f"### {w}")
                 with st.expander("點擊 + 檢視結果"):
                     get_def_and_ex_from_wordnet(word, pos)
-                    
+
+    if morphology:
         st.markdown("## 詞形變化")
         # Collect inflected forms
         inflected_forms = [tok for tok in doc if tok.text.lower() != tok.lemma_.lower()]
