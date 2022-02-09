@@ -198,7 +198,7 @@ st.set_page_config(
 
 # Choose a language and select functions
 st.markdown(f"# {DESCRIPTION}") 
-st.sidebar.write("請選擇語言")
+st.sidebar.write("請選擇一種語言並勾選至少一個功能")
 selected_model = st.sidebar.radio("", models_to_display)
 
 # Load the selected model
@@ -236,8 +236,6 @@ st.markdown("---")
 # Language-specific logic 
 punct_and_sym = ["PUNCT", "SYM"]
 if selected_model == models_to_display[0]: # Chinese 
-    st.sidebar.write("請勾選功能") 
-    st.sidebar.markdown("---")
     #keywords_extraction = st.sidebar.checkbox("關鍵詞分析", False) # YAKE doesn't work for Chinese texts
     analyzed_text = st.sidebar.checkbox("分析後文本", True)
     defs_examples = st.sidebar.checkbox("單詞解釋與例句", True)
@@ -279,8 +277,6 @@ if selected_model == models_to_display[0]: # Chinese
         visualize_tokens(doc, attrs=["text", "pos_", "tag_", "dep_", "head"], title="斷詞特徵")
     
 elif selected_model == models_to_display[2]: # Japanese 
-    st.sidebar.write("請勾選功能") 
-    st.sidebar.markdown("---")
     keywords_extraction = st.sidebar.checkbox("關鍵詞分析", False)
     analyzed_text = st.sidebar.checkbox("分析後文本", True)
     defs_examples = st.sidebar.checkbox("單詞解釋與例句", True)
@@ -333,8 +329,6 @@ elif selected_model == models_to_display[2]: # Japanese
         visualize_tokens(doc, attrs=["text", "pos_", "tag_", "dep_", "head"], title="斷詞特徵")
         
 elif selected_model == models_to_display[1]: # English 
-    st.sidebar.write("請勾選功能")
-    st.sidebar.markdown("---")
     keywords_extraction = st.sidebar.checkbox("關鍵詞分析", False)
     analyzed_text = st.sidebar.checkbox("分析後文本", True)
     defs_examples = st.sidebar.checkbox("單詞解釋與例句", True)
