@@ -197,6 +197,8 @@ st.set_page_config(
 
 # Choose a language and select functions
 st.markdown(f"# {DESCRIPTION}") 
+st.markdown(f"- 開啟左側選單可選擇語言與功能")
+st.markdown(f"- 選單自動隱藏時，點選左上角 > 符號以開啟選單")
 st.sidebar.write("請選擇一種語言並勾選至少一個功能")
 selected_model = st.sidebar.radio("", models_to_display)
 
