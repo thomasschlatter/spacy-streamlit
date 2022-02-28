@@ -221,10 +221,10 @@ if selected_model == "中文": # Chinese
         nlp.tokenizer = JiebaTokenizer(nlp.vocab)
     default_text = ZH_TEXT
     default_regex = ZH_REGEX
-elif selected_model == "English"
+elif selected_model == "English":
     default_text = EN_TEXT 
     default_regex = EN_REGEX 
-elif selected_model == "日本語" # Japanese
+elif selected_model == "日本語": # Japanese
     default_text = JA_TEXT
     default_regex = JA_REGEX 
 
