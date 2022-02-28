@@ -214,7 +214,7 @@ nltk.download('wordnet')
 nltk.download('omw') # standing for Open Multilingual WordNet
 
 # Shared logic across languages
-if selected_model == "中文" # Chinese
+if selected_model == "中文": # Chinese
     # Select a tokenizer if the Chinese model is chosen
     selected_tokenizer = st.radio("請選擇斷詞模型", ["jieba-TW", "spaCy"])
     if selected_tokenizer == "jieba-TW":
