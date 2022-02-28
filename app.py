@@ -214,17 +214,17 @@ nltk.download('wordnet')
 nltk.download('omw') # standing for Open Multilingual WordNet
 
 # Shared logic across languages
-if selected_model == models_to_display[0]: # Chinese
+if selected_model == "中文" # Chinese
     # Select a tokenizer if the Chinese model is chosen
     selected_tokenizer = st.radio("請選擇斷詞模型", ["jieba-TW", "spaCy"])
     if selected_tokenizer == "jieba-TW":
         nlp.tokenizer = JiebaTokenizer(nlp.vocab)
     default_text = ZH_TEXT
     default_regex = ZH_REGEX
-elif selected_model == models_to_display[1]: # English
+elif selected_model == "English"
     default_text = EN_TEXT 
     default_regex = EN_REGEX 
-elif selected_model == models_to_display[2]: # Japanese
+elif selected_model == "日本語" # Japanese
     default_text = JA_TEXT
     default_regex = JA_REGEX 
 
@@ -236,7 +236,7 @@ st.markdown("---")
 
 # Language-specific logic 
 punct_and_sym = ["PUNCT", "SYM"]
-if selected_model == models_to_display[0]: # Chinese 
+if selected_model == "中文": # Chinese 
     #keywords_extraction = st.sidebar.checkbox("關鍵詞分析", False) # YAKE doesn't work for Chinese texts
     analyzed_text = st.sidebar.checkbox("分析後文本", True)
     defs_examples = st.sidebar.checkbox("單詞解釋與例句", True)
@@ -277,7 +277,7 @@ if selected_model == models_to_display[0]: # Chinese
     if tok_table:
         visualize_tokens(doc, attrs=["text", "pos_", "tag_", "dep_", "head"], title="斷詞特徵")
     
-elif selected_model == models_to_display[2]: # Japanese 
+elif selected_model == "日本語": # Japanese 
     keywords_extraction = st.sidebar.checkbox("關鍵詞分析", False)
     analyzed_text = st.sidebar.checkbox("分析後文本", True)
     defs_examples = st.sidebar.checkbox("單詞解釋與例句", True)
@@ -329,7 +329,7 @@ elif selected_model == models_to_display[2]: # Japanese
     if tok_table:
         visualize_tokens(doc, attrs=["text", "pos_", "tag_", "dep_", "head"], title="斷詞特徵")
         
-elif selected_model == models_to_display[1]: # English 
+elif selected_model == "English": 
     keywords_extraction = st.sidebar.checkbox("關鍵詞分析", False)
     analyzed_text = st.sidebar.checkbox("分析後文本", True)
     defs_examples = st.sidebar.checkbox("單詞解釋與例句", True)
