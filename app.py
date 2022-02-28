@@ -19,7 +19,7 @@ from nltk.corpus import wordnet as wn
 MODELS = {"中文": "zh_core_web_sm", 
           "English": "en_core_web_sm", 
           "日本語": "ja_ginza"}
-models_to_display = list(MODELS.keys())
+models_to_display = ["English", "日本語", "中文"]
 ZH_TEXT = """（中央社）迎接虎年到來，台北101今天表示，即日起推出「虎年新春燈光秀」，將持續至2月5日，每晚6時至10時，除整點會有報時燈光變化外，每15分鐘還會有3分鐘的燈光秀。台北101下午透過新聞稿表示，今年特別設計「虎年新春燈光秀」，從今晚開始閃耀台北天際線，一直延續至2月5日，共7天。"""
 ZH_REGEX = "\d{2,4}[\u4E00-\u9FFF]+"
 EN_TEXT = """(Reuters) Taiwan's government believes there is "enormous" room for cooperation with the European Union on semiconductors, responding to plans from the bloc to boost its chip industry and cut its dependence on U.S. and Asian supplies.
