@@ -116,11 +116,6 @@ nlp.add_pipe("yake") # keyword extraction
 # Merge entity spans to tokens
 # nlp.add_pipe("merge_entities") 
 
-# Download NLTK data 
-nltk.download('wordnet')
-nltk.download('omw') # standing for Open Multilingual WordNet
-
-
 st.markdown("## 待分析文本")     
 st.info("請在下面的文字框輸入文本並按下Ctrl + Enter以更新分析結果")
 text = st.text_area("",  JA_TEXT, height=200)
