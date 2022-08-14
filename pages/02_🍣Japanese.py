@@ -12,7 +12,7 @@ import streamlit as st
 
 # Global variables
 JA_TEXT = """（朝日新聞）台湾気分のパワースポット ＪＲ大久保駅南口のすぐそばにある「東京媽祖廟（まそびょう）」は、台湾で広く信仰されている道教の神様を祭る。居酒屋やコンビニが並ぶ通りで、金色の竜など豪華な装飾が施された４階建ての赤い建物はとても目立つ。"""
-DESCRIPTION = "AI模型輔助語言學習"
+DESCRIPTION = "AI模型輔助語言學習：日語"
 TOK_SEP = " | "
 
 # External API callers
