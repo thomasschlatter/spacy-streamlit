@@ -104,10 +104,11 @@ st.markdown(f"# {DESCRIPTION}")
 
 # Load the language model
 nlp = spacy.load(LOADED_MODEL)
+
+# Add pipelines to spaCy
 nlp.add_pipe("yake") # keyword extraction
-          
-# Merge entity spans to tokens
-# nlp.add_pipe("merge_entities") 
+nlp.add_pipe("spacy_wordnet", after='tagger', config={'lang': nlp.lang}) # WordNet
+# nlp.add_pipe("merge_entities") # Merge entity spans to tokens
 
 # Page starts from here
 st.markdown("## 待分析文本")     
@@ -128,8 +129,7 @@ if keywords_extraction:
     create_kw_section(doc)
 
 if analyzed_text:
-    st.markdown("## 分析後文本") 
-    nlp.add_pipe("spacy_wordnet", after='tagger', config={'lang': nlp.lang})
+    st.markdown("## 分析後文本")     
     for idx, sent in enumerate(doc.sents):
         enriched_sentence = []
         for tok in sent:
@@ -161,7 +161,6 @@ if analyzed_text:
 
         display_text = " ".join(enriched_sentence)
         st.write(f"{idx+1} >>> {display_text}")     
-
 
 if defs_examples:
     st.markdown("## 單詞解釋與例句")
@@ -195,4 +194,3 @@ if ner_viz:
 
 if tok_table:
     visualize_tokens(doc, attrs=["text", "pos_", "tag_", "dep_", "head"], title="斷詞特徵")
-       
