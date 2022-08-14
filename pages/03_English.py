@@ -11,6 +11,10 @@ import streamlit as st
 import nltk
 from nltk.corpus import wordnet as wn
 
+# Download NLTK data 
+nltk.download('wordnet')
+nltk.download('omw') # standing for Open Multilingual WordNet
+
 # Global variables
 EN_TEXT = """(Reuters) Taiwan's government believes there is "enormous" room for cooperation with the European Union on semiconductors, responding to plans from the bloc to boost its chip industry and cut its dependence on U.S. and Asian supplies.
 The EU's plan mentions Taiwan, home to the world's largest contract chipmaker TSMC and other leading semiconductor companies, as one of the "like-minded partners" Europe would like to work with.
@@ -19,7 +23,6 @@ Taiwan's Foreign Ministry said in a statement it was pleased to see the strong m
 DESCRIPTION = "AI模型輔助語言學習"
 LOADED_MODEL = "en_core_web_sm"
 TOK_SEP = " | "
-
     
 # Utility functions
 def create_eng_df(tokens):
@@ -99,23 +102,21 @@ st.set_page_config(
 )
 st.markdown(f"# {DESCRIPTION}") 
 
-# Load the selected model
+# Load the language model
 nlp = spacy.load(LOADED_MODEL)
 nlp.add_pipe("yake") # keyword extraction
           
 # Merge entity spans to tokens
 # nlp.add_pipe("merge_entities") 
 
-# Download NLTK data 
-nltk.download('wordnet')
-nltk.download('omw') # standing for Open Multilingual WordNet
-
+# Page starts from here
 st.markdown("## 待分析文本")     
 st.info("請在下面的文字框輸入文本並按下Ctrl + Enter以更新分析結果")
 text = st.text_area("",  EN_TEXT, height=200)
 doc = nlp(text)
 st.markdown("---")
-    
+
+# Checkboxes for various features
 keywords_extraction = st.checkbox("關鍵詞分析", False)
 analyzed_text = st.checkbox("分析後文本", True)
 defs_examples = st.checkbox("單詞解釋與例句", True)
@@ -129,7 +130,6 @@ if keywords_extraction:
 if analyzed_text:
     st.markdown("## 分析後文本") 
     nlp.add_pipe("spacy_wordnet", after='tagger', config={'lang': nlp.lang})
-    doc = nlp(text)
     for idx, sent in enumerate(doc.sents):
         enriched_sentence = []
         for tok in sent:
