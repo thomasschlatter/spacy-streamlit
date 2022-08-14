@@ -13,7 +13,7 @@ EN_TEXT = """(Reuters) Taiwan's government believes there is "enormous" room for
 The EU's plan mentions Taiwan, home to the world's largest contract chipmaker TSMC and other leading semiconductor companies, as one of the "like-minded partners" Europe would like to work with.
 The plan, unveiled on Tuesday, calls for the European Commission to ease funding rules for innovative semiconductor plants, a move that comes as a global chip shortage and supply chain bottlenecks have created havoc for many industries.
 Taiwan's Foreign Ministry said in a statement it was pleased to see the strong momentum in bilateral trade and investment between Taiwan and the EU, and welcomed the EU attaching so much importance to the island."""
-DESCRIPTION = "AI模型輔助語言學習: 英語"
+DESCRIPTION = "AI模型輔助語言學習：英語"
 LOADED_MODEL = "en_core_web_sm"
 TOK_SEP = " | "
 API_LOOKUP = {}
