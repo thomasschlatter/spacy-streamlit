@@ -10,7 +10,7 @@ from spacy_wordnet.wordnet_annotator import WordnetAnnotator
 import streamlit as st
 import nltk
 # Download NLTK data 
-nltk.download('wordnet')
+nltk.download('wordnet', '/home/appuser/nltk_data') # the second argument specifies the path for the wordnet data
 nltk.download('omw') # standing for Open Multilingual WordNet
 from nltk.corpus import wordnet as wn
 
