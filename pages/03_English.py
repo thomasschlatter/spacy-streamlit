@@ -9,11 +9,10 @@ import spacy_ke
 from spacy_wordnet.wordnet_annotator import WordnetAnnotator 
 import streamlit as st
 import nltk
-from nltk.corpus import wordnet as wn
-
 # Download NLTK data 
 nltk.download('wordnet')
 nltk.download('omw') # standing for Open Multilingual WordNet
+from nltk.corpus import wordnet as wn
 
 # Global variables
 EN_TEXT = """(Reuters) Taiwan's government believes there is "enormous" room for cooperation with the European Union on semiconductors, responding to plans from the bloc to boost its chip industry and cut its dependence on U.S. and Asian supplies.
