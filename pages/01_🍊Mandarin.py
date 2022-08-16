@@ -12,10 +12,11 @@ from spacy.tokens import Doc
 import streamlit as st
 
 # Global variables
-ZH_TEXT = """（中央社）迎接虎年到來，台北101今天表示，即日起推出「虎年新春燈光秀」，將持續至2月5日，每晚6時至10時，除整點會有報時燈光變化外，每15分鐘還會有3分鐘的燈光秀。台北101下午透過新聞稿表示，今年特別設計「虎年新春燈光秀」，從今晚開始閃耀台北天際線，一直延續至2月5日，共7天。"""
+DEFAULT_TEXT = """（中央社）迎接虎年到來，台北101今天表示，即日起推出「虎年新春燈光秀」，將持續至2月5日，每晚6時至10時，除整點會有報時燈光變化外，每15分鐘還會有3分鐘的燈光秀。台北101下午透過新聞稿表示，今年特別設計「虎年新春燈光秀」，從今晚開始閃耀台北天際線，一直延續至2月5日，共7天。"""
 DESCRIPTION = "AI模型輔助語言學習：華語"
 TOK_SEP = " | "
 PUNCT_SYM = ["PUNCT", "SYM"]
+MODEL_NAME = "zh_core_web_sm"
 
 # External API callers
 def moedict_caller(word):
@@ -116,25 +117,24 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="auto",
 )
-
-# Choose a language and select functions
 st.markdown(f"# {DESCRIPTION}") 
 
 # Load the model
-nlp = spacy.load('zh_core_web_sm')
+nlp = spacy.load(MODEL_NAME)
           
-# Merge entity spans to tokens
-# nlp.add_pipe("merge_entities") 
+# Add pipelines to spaCy
+# nlp.add_pipe("yake") # keyword extraction
+# nlp.add_pipe("merge_entities") # Merge entity spans to tokens
 
 # Select a tokenizer if the Chinese model is chosen
 selected_tokenizer = st.radio("請選擇斷詞模型", ["jieba-TW", "spaCy"])
 if selected_tokenizer == "jieba-TW":
     nlp.tokenizer = JiebaTokenizer(nlp.vocab)
-default_text = ZH_TEXT
 
+# Page starts from here
 st.markdown("## 待分析文本")     
 st.info("請在下面的文字框輸入文本並按下Ctrl + Enter以更新分析結果")
-text = st.text_area("",  default_text, height=200)
+text = st.text_area("",  DEFAULT_TEXT, height=200)
 doc = nlp(text)
 st.markdown("---")
 
