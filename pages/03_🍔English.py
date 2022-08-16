@@ -17,6 +17,7 @@ DESCRIPTION = "AI模型輔助語言學習：英語"
 TOK_SEP = " | "
 MODEL_NAME = "en_core_web_sm"
 API_LOOKUP = {}
+MAX_SYM_NUM = 5
 
 # External API caller
 def free_dict_caller(word):
@@ -154,6 +155,8 @@ if analyzed_text:
             else:
                 synonyms = get_synonyms(tok.text, tok.pos_)
                 if synonyms:
+                    if len(synonyms) > MAX_SYM_NUM:
+                        synonyms = synonyms[:MAX_SYM_NUM]
                     added_verbs = " | ".join(synonyms)
                     enriched_tok = f"{tok.text} (cf. {added_verbs})"
                     enriched_sentence.append(enriched_tok)  
