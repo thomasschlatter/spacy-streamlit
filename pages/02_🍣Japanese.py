@@ -11,9 +11,10 @@ import spacy_ke
 import streamlit as st
 
 # Global variables
-JA_TEXT = """（朝日新聞）台湾気分のパワースポット ＪＲ大久保駅南口のすぐそばにある「東京媽祖廟（まそびょう）」は、台湾で広く信仰されている道教の神様を祭る。居酒屋やコンビニが並ぶ通りで、金色の竜など豪華な装飾が施された４階建ての赤い建物はとても目立つ。"""
+DEFAULT_TEXT = """（朝日新聞）台湾気分のパワースポット ＪＲ大久保駅南口のすぐそばにある「東京媽祖廟（まそびょう）」は、台湾で広く信仰されている道教の神様を祭る。居酒屋やコンビニが並ぶ通りで、金色の竜など豪華な装飾が施された４階建ての赤い建物はとても目立つ。"""
 DESCRIPTION = "AI模型輔助語言學習：日語"
 TOK_SEP = " | "
+MODEL_NAME = "ja_ginza"
 
 # External API callers
 def parse_jisho_senses(word):
@@ -109,16 +110,17 @@ st.set_page_config(
 )
 st.markdown(f"# {DESCRIPTION}") 
 
-# Load the selected model
-nlp = spacy.load("ja_ginza")
-nlp.add_pipe("yake") # keyword extraction
-          
-# Merge entity spans to tokens
-# nlp.add_pipe("merge_entities") 
+# Load the model
+nlp = spacy.load(MODEL_NAME)
 
+# Add pipelines to spaCy
+nlp.add_pipe("yake") # keyword extraction
+# nlp.add_pipe("merge_entities") # Merge entity spans to tokens
+
+# Page starts from here
 st.markdown("## 待分析文本")     
 st.info("請在下面的文字框輸入文本並按下Ctrl + Enter以更新分析結果")
-text = st.text_area("",  JA_TEXT, height=200)
+text = st.text_area("",  DEFAULT_TEXT, height=200)
 doc = nlp(text)
 st.markdown("---")
 
