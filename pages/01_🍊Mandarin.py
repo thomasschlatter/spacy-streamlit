@@ -138,8 +138,8 @@ text = st.text_area("",  default_text, height=200)
 doc = nlp(text)
 st.markdown("---")
 
-# keywords_extraction = st.sidebar.checkbox("關鍵詞分析", False) # YAKE doesn't work for Chinese texts
 st.info("請勾選以下至少一項功能")
+# keywords_extraction = st.sidebar.checkbox("關鍵詞分析", False) # YAKE doesn't work for Chinese texts
 analyzed_text = st.checkbox("增強文本", True)
 defs_examples = st.checkbox("單詞解析", True)
 # morphology = st.sidebar.checkbox("詞形變化", True)
