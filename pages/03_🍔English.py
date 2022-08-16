@@ -9,13 +9,13 @@ import spacy_ke
 import streamlit as st
 
 # Global variables
-EN_TEXT = """(Reuters) Taiwan's government believes there is "enormous" room for cooperation with the European Union on semiconductors, responding to plans from the bloc to boost its chip industry and cut its dependence on U.S. and Asian supplies.
+DEFAULT_TEXT = """(Reuters) Taiwan's government believes there is "enormous" room for cooperation with the European Union on semiconductors, responding to plans from the bloc to boost its chip industry and cut its dependence on U.S. and Asian supplies.
 The EU's plan mentions Taiwan, home to the world's largest contract chipmaker TSMC and other leading semiconductor companies, as one of the "like-minded partners" Europe would like to work with.
 The plan, unveiled on Tuesday, calls for the European Commission to ease funding rules for innovative semiconductor plants, a move that comes as a global chip shortage and supply chain bottlenecks have created havoc for many industries.
 Taiwan's Foreign Ministry said in a statement it was pleased to see the strong momentum in bilateral trade and investment between Taiwan and the EU, and welcomed the EU attaching so much importance to the island."""
 DESCRIPTION = "AI模型輔助語言學習：英語"
-LOADED_MODEL = "en_core_web_sm"
 TOK_SEP = " | "
+MODEL_NAME = "en_core_web_sm"
 API_LOOKUP = {}
 
 # External API caller
@@ -120,7 +120,7 @@ st.set_page_config(
 st.markdown(f"# {DESCRIPTION}") 
 
 # Load the language model
-nlp = spacy.load(LOADED_MODEL)
+nlp = spacy.load(MODEL_NAME)
 
 # Add pipelines to spaCy
 nlp.add_pipe("yake") # keyword extraction
@@ -129,7 +129,7 @@ nlp.add_pipe("yake") # keyword extraction
 # Page starts from here
 st.markdown("## 待分析文本")     
 st.info("請在下面的文字框輸入文本並按下Ctrl + Enter以更新分析結果")
-text = st.text_area("",  EN_TEXT, height=200)
+text = st.text_area("",  DEFAULT_TEXT, height=200)
 doc = nlp(text)
 st.markdown("---")
 
