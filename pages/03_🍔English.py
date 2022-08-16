@@ -133,10 +133,10 @@ text = st.text_area("",  EN_TEXT, height=200)
 doc = nlp(text)
 st.markdown("---")
 
-# Checkboxes for various features
+st.info("請勾選以下至少一項功能")
 keywords_extraction = st.checkbox("關鍵詞分析", False)
-analyzed_text = st.checkbox("分析後文本", True)
-defs_examples = st.checkbox("單詞解釋與例句", True)
+analyzed_text = st.checkbox("增強文本", True)
+defs_examples = st.checkbox("單詞解析", True)
 morphology = st.checkbox("詞形變化", False)
 ner_viz = st.checkbox("命名實體", True)
 tok_table = st.checkbox("斷詞特徵", False)
