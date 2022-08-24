@@ -9,10 +9,20 @@ import spacy_ke
 import streamlit as st
 
 # Global variables
-DEFAULT_TEXT = """(Reuters) Taiwan's government believes there is "enormous" room for cooperation with the European Union on semiconductors, responding to plans from the bloc to boost its chip industry and cut its dependence on U.S. and Asian supplies.
-The EU's plan mentions Taiwan, home to the world's largest contract chipmaker TSMC and other leading semiconductor companies, as one of the "like-minded partners" Europe would like to work with.
-The plan, unveiled on Tuesday, calls for the European Commission to ease funding rules for innovative semiconductor plants, a move that comes as a global chip shortage and supply chain bottlenecks have created havoc for many industries.
-Taiwan's Foreign Ministry said in a statement it was pleased to see the strong momentum in bilateral trade and investment between Taiwan and the EU, and welcomed the EU attaching so much importance to the island."""
+DEFAULT_TEXT = """So I lived my life alone, without anyone that I could really talk to, until I had an
+accident with my plane in the Desert of Sahara, six years ago. Something was
+broken in my engine. And as I had with me neither a mechanic nor any
+passengers, I set myself to attempt the difficult repairs all alone. It was a question
+of life or death for me: I had scarcely enough drinking water to last a week.
+The first night, then, I went to sleep on the sand, a thousand miles from any
+human habitation. I was more isolated than a shipwrecked sailor on a raft in the
+middle of the ocean. Thus you can imagine my amazement, at sunrise, when I was
+awakened by an odd little voice. It said:
+"If you please−− draw me a sheep!"
+"What!"
+"Draw me a sheep!" 
+The Little Prince
+"""
 DESCRIPTION = "AI模型輔助語言學習：英語"
 TOK_SEP = " | "
 MODEL_NAME = "en_core_web_sm"
